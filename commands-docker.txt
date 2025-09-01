@@ -1,0 +1,6 @@
+
+netstat -aof | findstr port
+docker create network name-network
+
+docker run --name library -p 5432:5432 -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -e POSTGRES_DB=library --network library-network -d postgres=version
+docker run --name pgadmin4 -p 15432:80 -e PGADMIN_DEFAULT_EMAIL=email -e PGADMIN_DEFAULT_PASSWORD=password --network library-network -d dpage/pgadmin4
