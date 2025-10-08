@@ -5,7 +5,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
@@ -32,7 +31,7 @@ public class DatabaseConfiguration {
 
         config.setMaximumPoolSize(10);
         config.setMinimumIdle(1);
-        config.setPoolName("lirary-db-pool");
+        config.setPoolName("library-db-pool");
         config.setMaxLifetime(600000);
         config.setConnectionTimeout(100000);
         config.setConnectionTestQuery("SELECT 1");
