@@ -62,8 +62,7 @@ public class BookService {
         if(nameAuthor!=null) {
             specs = specs.and(nameAuthorLike(nameAuthor));
         }
-        Pageable pageable = PageRequest.of(0, 10);
-
+        Pageable pageable = PageRequest.of(page, pageSize);
         return repository.findAll(specs, pageable);
     }
 
