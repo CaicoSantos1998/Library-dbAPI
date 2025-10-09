@@ -8,6 +8,7 @@ import io.github.CaicoSantos1998.libraryapi.exceptions.RegisterDuplicatedExcepti
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -57,9 +58,16 @@ public class GlobalExceptionHandler {
                 List.of(new FieldError(e.getField(), e.getMessage())));
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseError handlerAccessDeniedException(AccessDeniedException e) {
+        return new ResponseError(HttpStatus.FORBIDDEN.value(), "Access denied!!", List.of());
+    }
+
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseError handlerErrors(RuntimeException e) {
+        System.out.println(e.getMessage());
         return new ResponseError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "An unexpected error occurred! SORRY", List.of());
     }
