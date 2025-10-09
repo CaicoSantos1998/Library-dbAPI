@@ -1,9 +1,12 @@
 package io.github.CaicoSantos1998.libraryapi.config;
 
+import io.github.CaicoSantos1998.libraryapi.security.CustomUsersDetailsService;
+import io.github.CaicoSantos1998.libraryapi.service.UsersService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
 
     @Bean
@@ -28,8 +32,7 @@ public class SecurityConfiguration {
                     configurer.loginPage("/login").permitAll();
                 })
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/authors/**").hasRole("ADMIN");
-                    authorize.requestMatchers("/books/**").hasAnyRole("USER", "ADMIN");
+                    authorize.requestMatchers(HttpMethod.POST, "/users/**").permitAll();
                     authorize.anyRequest().authenticated();
                 })
                 .build();
@@ -41,18 +44,21 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-        UserDetails user1 = User.builder()
-                .username("user")
-                .password(encoder.encode("123"))
-                .roles("USER")
-                .build();
+    public UserDetailsService userDetailsService(UsersService usersService
+            /*PasswordEncoder encoder*/) {
+//        This method is in memory
+//        UserDetails user1 = User.builder()
+//                .username("user")
+//                .password(encoder.encode("123"))
+//                .roles("USER")
+//                .build();
+//
+//        UserDetails user2 = User.builder()
+//                .username("admin")
+//                .password(encoder.encode("321"))
+//                .roles("ADMIN")
+//                .build();
 
-        UserDetails user2 = User.builder()
-                .username("admin")
-                .password(encoder.encode("321"))
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user1, user2);
+        return new CustomUsersDetailsService(usersService);
     }
 }
