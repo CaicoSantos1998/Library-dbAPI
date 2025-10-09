@@ -2,7 +2,9 @@ package io.github.CaicoSantos1998.libraryapi.service;
 
 import io.github.CaicoSantos1998.libraryapi.model.Book;
 import io.github.CaicoSantos1998.libraryapi.model.GenderBook;
+import io.github.CaicoSantos1998.libraryapi.model.Users;
 import io.github.CaicoSantos1998.libraryapi.repository.RepositoryBook;
+import io.github.CaicoSantos1998.libraryapi.security.SecurityService;
 import io.github.CaicoSantos1998.libraryapi.validator.BookValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,9 +24,12 @@ public class BookService {
 
     private final RepositoryBook  repository;
     private final BookValidator validator;
+    private final SecurityService securityService;
 
     public Book save(Book book) {
         validator.validate(book);
+        Users users = securityService.getUserLogged();
+        book.setUsers(users);
         return repository.save(book);
     }
 
@@ -45,7 +49,8 @@ public class BookService {
             Integer publicationYear,
             Integer page,
             Integer pageSize) {
-        Specification<Book> specs = Specification.where((root, query, cb) ->
+        Specification<Book> specs = Specification.
+                where((root, query, cb) ->
                 cb.conjunction() );
         if(isbn!=null) {
             specs = specs.and(isbnEqual(isbn));

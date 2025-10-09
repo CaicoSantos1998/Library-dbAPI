@@ -2,8 +2,10 @@ package io.github.CaicoSantos1998.libraryapi.service;
 
 import io.github.CaicoSantos1998.libraryapi.exceptions.OperationNotPermittedException;
 import io.github.CaicoSantos1998.libraryapi.model.Author;
+import io.github.CaicoSantos1998.libraryapi.model.Users;
 import io.github.CaicoSantos1998.libraryapi.repository.RepositoryAuthor;
 import io.github.CaicoSantos1998.libraryapi.repository.RepositoryBook;
+import io.github.CaicoSantos1998.libraryapi.security.SecurityService;
 import io.github.CaicoSantos1998.libraryapi.validator.ValidatorAuthor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -21,9 +23,13 @@ public class AuthorService {
     private final RepositoryAuthor repository;
     private final ValidatorAuthor validator;
     private final RepositoryBook repositoryBook;
+    private final SecurityService securityService;
+
 
     public Author saveAuthor(Author author) {
         validator.validate(author);
+        Users users = securityService.getUserLogged();
+        author.setUsers(users);
         return repository.save(author);
     }
 
