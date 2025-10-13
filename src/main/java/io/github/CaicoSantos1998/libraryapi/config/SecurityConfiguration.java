@@ -67,6 +67,6 @@ public class SecurityConfiguration {
 
     @Bean
     public GrantedAuthorityDefaults grantedAuthorityDefaults() {
-        return new GrantedAuthorityDefaults("");
+        return new GrantedAuthorityDefaults("GROUP_");
     }
 }
