@@ -28,13 +28,15 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(configurer -> {
-                    configurer.loginPage("/login").permitAll();
-                })
+//                .formLogin(configurer -> {
+//                    configurer.loginPage("/login").permitAll();
+//                })
+                .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(HttpMethod.POST, "/users/**").permitAll();
                     authorize.anyRequest().authenticated();
                 })
+                .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 
@@ -43,7 +45,7 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder(10);
     }
 
-    @Bean
+
     public UserDetailsService userDetailsService(UsersService usersService
             /*PasswordEncoder encoder*/) {
 //        This method is in memory
