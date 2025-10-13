@@ -21,7 +21,7 @@ public class CustomAuthentication implements Authentication {
         return this.users
                 .getRoles()
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 
