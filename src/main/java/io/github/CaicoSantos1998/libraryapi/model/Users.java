@@ -23,8 +23,12 @@ public class Users {
     @Column
     private String password;
 
+    @Column
+    private String email;
+
     @Type(ListArrayType.class)
     @Column(name = "roles", columnDefinition = "VARCHAR[]")
     private List<String> roles;
+
 
 }
