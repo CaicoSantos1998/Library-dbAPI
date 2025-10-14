@@ -26,7 +26,7 @@ public class BookController implements GenericController {
     private final BookMapper mapper;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'ADMIN')")
     public ResponseEntity<Void> save(@RequestBody @Valid RegistrationBookDTO rbDTO) {
         Book book = mapper.toEntity(rbDTO);
         service.save(book);
@@ -35,7 +35,7 @@ public class BookController implements GenericController {
     }
 
     @GetMapping("{id}")
-    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('USER', 'OPERATOR', 'ADMIN')")
     public ResponseEntity<ResultSearchBookDTO> getDetails(@PathVariable String id) {
         return service.getById(UUID.fromString(id))
                 .map(book -> {
@@ -45,7 +45,7 @@ public class BookController implements GenericController {
     }
 
     @DeleteMapping("{id}")
-    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable String id) {
         return service.getById(UUID.fromString(id))
                 .map(book -> {
@@ -55,7 +55,7 @@ public class BookController implements GenericController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('USER', 'OPERATOR', 'ADMIN')")
     public ResponseEntity<Page<ResultSearchBookDTO>> search(
             @RequestParam(value = "isbn", required = false)
             String isbn,
@@ -81,7 +81,7 @@ public class BookController implements GenericController {
     }
 
     @PutMapping("{id}")
-    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'ADMIN')")
     public ResponseEntity<Object> update(
             @PathVariable String id,
             @RequestBody @Valid RegistrationBookDTO dto) {

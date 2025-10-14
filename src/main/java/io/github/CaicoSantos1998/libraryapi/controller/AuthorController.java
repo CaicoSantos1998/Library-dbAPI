@@ -25,7 +25,7 @@ public class AuthorController implements GenericController {
     private final AuthorMapper mapper;
 
     @PostMapping
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> save(@RequestBody @Valid AuthorDTO dto) {
         Author author = mapper.toEntity(dto);
         service.saveAuthor(author);
@@ -34,7 +34,7 @@ public class AuthorController implements GenericController {
     }
 
     @GetMapping("{id}")
-    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('USER', 'OPERATOR', 'ADMIN')")
     public ResponseEntity<AuthorDTO> getDetail(@PathVariable String id) {
         var idAuthor = UUID.fromString(id);
         Optional<Author> authorOptional = service.getById(idAuthor);
@@ -47,7 +47,7 @@ public class AuthorController implements GenericController {
     }
 
     @DeleteMapping("{id}")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         var idAuthor = UUID.fromString(id);
         Optional<Author> authorOptional = service.getById(idAuthor);
@@ -60,7 +60,7 @@ public class AuthorController implements GenericController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('USER', 'OPERATOR', 'ADMIN')")
     public ResponseEntity<List<AuthorDTO>> search(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "nationality", required = false) String nationality) {
         List<Author> resultList = service.searchByExample(name, nationality);
         List<AuthorDTO> list = resultList.stream().map(mapper::toDTO).collect(Collectors.toList());
@@ -68,7 +68,7 @@ public class AuthorController implements GenericController {
     }
 
     @PutMapping("{id}")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody @Valid AuthorDTO dto) {
         var idAuthor = UUID.fromString(id);
         Optional<Author> authorOptional = service.getById(idAuthor);
