@@ -3,8 +3,8 @@ spring:
     name: libraryAPI
   datasource:
     url: jdbc:postgresql://localhost:5432/library
-    username: cs
-    password: 2005
+    username: **
+    password: ***********
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
